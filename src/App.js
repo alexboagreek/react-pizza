@@ -4,7 +4,7 @@ import './scss/app.scss';
 
 function App() {
   return (
-    <header></header>
+    <header>REACT PIZZA APP</header>
   )
    
   
