@@ -8,7 +8,6 @@ function PizzaBlock() {
         setPizzaCount(pizzaCount + 1);
     }
     
-
     return (
         <div className="pizza-block">
         <img
