@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import Categories from '../Categories';
-import Sort from '../Sort';
-import PizzaBlock from '../PizzaBlock';
-import Skeleton from '../PizzaBlock/Skeleton';
+import Categories from '../components/Categories';
+import Sort from '../components/Sort';
+import PizzaBlock from '../components/PizzaBlock';
+import Skeleton from '../components/PizzaBlock/Skeleton';
 
 
 const Home = () =>  {
