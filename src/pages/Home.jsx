@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import ReactPaginate from 'react-paginate';
 
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
+import Pagination from '../components/Pagination';
 
 
 const Home = ({ searchValue }) =>  {
@@ -11,6 +13,7 @@ const Home = ({ searchValue }) =>  {
         const [goods, setGoods] = useState([]);
         const [isLoading, setIsLoading] = useState(true);
         const [categoryId, setCategoryId] = useState(0);
+        const [currentPage, setCurrentPage] = useState(1);
         const [sortType, setSortType] = useState({
             name: 'популярности',
             sortProperty: 'rating',
@@ -18,9 +21,12 @@ const Home = ({ searchValue }) =>  {
 
         useEffect(() => {
             setIsLoading(true);
-            fetch(`https://62a02298a9866630f8077dff.mockapi.io/goods?${
+
+            const search = searchValue ? `&search=${searchValue}` : '' ; 
+
+            fetch(`https://62a02298a9866630f8077dff.mockapi.io/goods?page=${currentPage}&limit=4&${
                 categoryId > 0 ? `category=${categoryId}` : ''
-            }&sortBy=${sortType.sortProperty.replace('-', '')}&order=${sortType.sortProperty.includes('-') ? 'asc' : 'desc'}`)
+            }&sortBy=${sortType.sortProperty.replace('-', '')}&order=${sortType.sortProperty.includes('-') ? 'asc' : 'desc'}${search}`)
             .then(response => { 
             return response.json(); 
         }).then(array => { 
@@ -29,15 +35,9 @@ const Home = ({ searchValue }) =>  {
             
             window.scrollTo(0, 0);
 
-        }, [categoryId, sortType]);
+        }, [categoryId, sortType, searchValue, currentPage]);
       
-        const pizzas = goods.filter(obj => {
-            if (obj.title.toLowerCase().includes(searchValue.toLowerCase())){
-                return true;
-            }
-            return false;
-        })
-            .map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+        const pizzas = goods.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
 
         return (
         <>
@@ -50,9 +50,11 @@ const Home = ({ searchValue }) =>  {
                 {
                 isLoading 
                 ? [...new Array(6)].map((_, index) => <Skeleton key={index}/>)
-                : pizzas }     
+                : pizzas }    
             </div> 
+            <Pagination onChangePage={number => setCurrentPage(number)}/>
         </>
+        
         );
     
 }
