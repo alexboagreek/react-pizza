@@ -6,10 +6,12 @@ import Sort from '../components/Sort';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Pagination from '../components/Pagination';
+import { SearchContext } from './../App';
 
 
-const Home = ({ searchValue }) =>  {
-    
+const Home = () =>  {
+
+        const { searchValue } = React.useContext(SearchContext);
         const [goods, setGoods] = useState([]);
         const [isLoading, setIsLoading] = useState(true);
         const [categoryId, setCategoryId] = useState(0);
