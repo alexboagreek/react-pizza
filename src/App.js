@@ -1,10 +1,14 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { decrement, increment } from "./redux/slices/filterSlice";
+import { Routes, Route } from "react-router-dom";
 
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import NotFound from "./pages/NotFound";
+import { store } from "./redux/store";
+
 
 import "./scss/app.scss";
 
@@ -13,7 +17,8 @@ export const SearchContext = React.createContext('');
 function App() {
 
   const [searchValue, setSearchValue] = React.useState('');
- 
+  const dispatch = useDispatch();
+
 
   return (
     <div className="wrapper">

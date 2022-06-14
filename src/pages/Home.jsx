@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import ReactPaginate from 'react-paginate';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { setCategoryId } from '../redux/slices/filterSlice';
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import PizzaBlock from '../components/PizzaBlock';
@@ -10,16 +11,25 @@ import { SearchContext } from './../App';
 
 
 const Home = () =>  {
+    const dispatch = useDispatch();
+    const categoryId = useSelector(state => state.filter.categoryId);
+    const sortType = useSelector(state => state.filter.sort.sortProperty);
+
+
+
 
         const { searchValue } = React.useContext(SearchContext);
         const [goods, setGoods] = useState([]);
         const [isLoading, setIsLoading] = useState(true);
-        const [categoryId, setCategoryId] = useState(0);
         const [currentPage, setCurrentPage] = useState(1);
-        const [sortType, setSortType] = useState({
-            name: 'популярности',
-            sortProperty: 'rating',
-        });
+
+
+        // магия dispatch  в действии
+
+        const onClickCategory = (id) => {
+            dispatch(setCategoryId(id));
+        }
+
 
         useEffect(() => {
             setIsLoading(true);
@@ -28,7 +38,7 @@ const Home = () =>  {
 
             fetch(`https://62a02298a9866630f8077dff.mockapi.io/goods?page=${currentPage}&limit=4&${
                 categoryId > 0 ? `category=${categoryId}` : ''
-            }&sortBy=${sortType.sortProperty.replace('-', '')}&order=${sortType.sortProperty.includes('-') ? 'asc' : 'desc'}${search}`)
+            }&sortBy=${sortType.replace('-', '')}&order=${sortType.includes('-') ? 'asc' : 'desc'}${search}`)
             .then(response => { 
             return response.json(); 
         }).then(array => { 
@@ -44,8 +54,8 @@ const Home = () =>  {
         return (
         <>
             <div className="content__top">
-            <Categories value={ categoryId } onClickCategory={ (index) => setCategoryId(index) } />
-            <Sort value={ sortType } onChangeSort={ (index) => setSortType(index) }/>
+            <Categories value={ categoryId } onClickCategory={ onClickCategory } />
+            <Sort />
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
