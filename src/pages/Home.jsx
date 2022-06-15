@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 
 import { setCategoryId } from '../redux/slices/filterSlice';
 import Categories from '../components/Categories';
@@ -34,16 +35,30 @@ const Home = () =>  {
         useEffect(() => {
             setIsLoading(true);
 
+            // const sortBy = sort.sortType.replace('-', '');
+            // const order = sort.sortType.includes('-') ? 'asc' : 'desc';
+            // const category = categoryId > 0 `category=${categoryId}` : '';
             const search = searchValue ? `&search=${searchValue}` : '' ; 
 
-            fetch(`https://62a02298a9866630f8077dff.mockapi.io/goods?page=${currentPage}&limit=4&${
-                categoryId > 0 ? `category=${categoryId}` : ''
-            }&sortBy=${sortType.replace('-', '')}&order=${sortType.includes('-') ? 'asc' : 'desc'}${search}`)
-            .then(response => { 
-            return response.json(); 
-        }).then(array => { 
-            setGoods(array); 
-            setIsLoading(false)});
+            // замена fetch запроса на axios.get()
+
+        //     fetch(`https://62a02298a9866630f8077dff.mockapi.io/goods?page=${currentPage}&limit=4&${
+        //         categoryId > 0 ? `category=${categoryId}` : ''
+        //     }&sortBy=${sortType.replace('-', '')}&order=${sortType.includes('-') ? 'asc' : 'desc'}${search}`)
+        //     .then(response => { 
+        //     return response.json(); 
+        // }).then(array => { 
+        //     setGoods(array); 
+        //     setIsLoading(false)});
+
+            axios.get(`https://62a02298a9866630f8077dff.mockapi.io/goods?page=${currentPage}&limit=4&${
+                        categoryId > 0 ? `category=${categoryId}` : ''
+                        }&sortBy=${sortType.replace('-', '')}&order=${sortType.includes('-') ? 'asc' : 'desc'}${search}`
+                    )
+                    .then(response => {
+                        setGoods(response.data); 
+                        setIsLoading(false); 
+                    });
             
             window.scrollTo(0, 0);
 
@@ -72,3 +87,5 @@ const Home = () =>  {
 }
 
 export default Home;
+
+
