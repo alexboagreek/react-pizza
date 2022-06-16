@@ -42,3 +42,9 @@
         opacity: 0.6;
     }
 }
+
+@media (max-width: 380px) {
+    .root {
+        left: 0;
+    }
+}
